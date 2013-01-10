@@ -5,13 +5,20 @@
 package pl.bfrackowiak.grapdbtests;
 
 import java.util.Random;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author Bartosz
  */
+@Entity
 public class VertexModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idVal;
     private int intVal;
     private double doubleVal;

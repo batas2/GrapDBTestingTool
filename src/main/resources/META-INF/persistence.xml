@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="PostgresPersistenceProvider" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>pl.bfrackowiak.grapdbtests.VertexModel</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://10.10.8.1:5432/GraphDBTestDB"/>
+      <property name="javax.persistence.jdbc.password" value="dsvdsvserv"/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+    </properties>
+  </persistence-unit>
+</persistence>

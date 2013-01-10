@@ -4,12 +4,14 @@
  */
 package pl.bfrackowiak.grapdbtests;
 
+import javax.persistence.Entity;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 /**
  *
  * @author Bartosz
  */
+@Entity
 public class WeightedEdge extends DefaultWeightedEdge {
 
     public WeightedEdge() {

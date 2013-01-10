@@ -17,17 +17,30 @@ public class App {
         Graph graph = GraphFactory.getRandomGrap(20, 40);
         RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
 
-        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(2000);
-
-        GraphDAO graphDAO = new Neo4JImp();
+        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(200);
         ScenarioExecutor scenarioExecutor = new ScenarioExecutor(scenario);
-        
+
+
+        GraphDAO neo4j = new Neo4JImp();
+
+        GraphDAO postgres = new PostgresSQLImp();
+        postgres.init();
+
         long start = System.currentTimeMillis();
-        
-        scenarioExecutor.Execute(graphDAO);
+
+        scenarioExecutor.Execute(postgres);
 
         long end = System.currentTimeMillis();
 
-        System.out.println("Execution time was " + (end - start) + " ms.");
+        System.out.println("PostgresSQL Execution time was " + (end - start) + " ms.");
+
+        start = System.currentTimeMillis();
+
+        scenarioExecutor.Execute(neo4j);
+
+        end = System.currentTimeMillis();
+
+        System.out.println("Neo4j Execution time was " + (end - start) + " ms.");
+
     }
 }

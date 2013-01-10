@@ -24,6 +24,7 @@ public class RandomScenarioGenerator implements Scenario {
     private Graph graph;
     private int startVertexSetSize;
     private int startEdgeSetSize;
+    private int vertexId;
 
     public RandomScenarioGenerator(Graph<VertexModel, DefaultEdge> graph) {
         this.graph = graph;
@@ -31,6 +32,7 @@ public class RandomScenarioGenerator implements Scenario {
 
         startVertexSetSize = graph.vertexSet().size();
         startEdgeSetSize = graph.edgeSet().size();
+        vertexId = startVertexSetSize;
     }
 
     @Override
@@ -113,6 +115,7 @@ public class RandomScenarioGenerator implements Scenario {
 
     private ScenarioCommand getCreateVertexCommand() {
         VertexModel newVertex = new VertexModel(rand.nextInt(), rand.nextDouble(), "foo" + rand.nextInt());
+        newVertex.setIdVal(vertexId++);
         graph.addVertex(newVertex);
         return new CreateVertexCommnad(newVertex);
     }

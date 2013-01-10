@@ -32,7 +32,9 @@ public class GraphFactory {
                 new DefaultDirectedGraph<VertexModel, WeightedEdge>(WeightedEdge.class);
 
         for (int i = 0; i < vertexCount; i++) {
-            graph.addVertex(GetRandomVertex());
+            VertexModel v = GetRandomVertex();
+            v.setIdVal(i);
+            graph.addVertex(v);
         }
 
         Object[] vertexModels = graph.vertexSet().toArray();
