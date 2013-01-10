@@ -6,6 +6,7 @@ package pl.bfrackowiak.grapdbtests;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
@@ -19,8 +20,29 @@ import org.jgrapht.graph.SimpleGraph;
  */
 public class GraphFactory {
 
-    public Graph<String, VertexModel> getRandomGrap() {
-        return null;
+    private static Random rand = new Random();
+
+    public static VertexModel GetRandomVertex() {
+        VertexModel vertex = new VertexModel(rand.nextInt(), rand.nextDouble(), "foo" + rand.nextInt());
+        return vertex;
+    }
+
+    public static Graph<VertexModel, WeightedEdge> getRandomGrap(int vertexCount, int edgeCount) {
+        DirectedGraph<VertexModel, WeightedEdge> graph =
+                new DefaultDirectedGraph<VertexModel, WeightedEdge>(WeightedEdge.class);
+
+        for (int i = 0; i < vertexCount; i++) {
+            graph.addVertex(GetRandomVertex());
+        }
+
+        Object[] vertexModels = graph.vertexSet().toArray();
+
+        for (int i = 0; i < edgeCount; i++) {
+            VertexModel vertexSrc = (VertexModel) vertexModels[rand.nextInt(vertexCount)];
+            VertexModel vertexDest = (VertexModel) vertexModels[rand.nextInt(vertexCount)];
+            graph.addEdge(vertexSrc, vertexDest);
+        }
+        return graph;
     }
 
     /**
@@ -31,7 +53,7 @@ public class GraphFactory {
      * * @return a graph based on URL objects.
      *
      */
-    private static DirectedGraph<URL, DefaultEdge> createDirectedGraph() {
+    public static DirectedGraph<URL, DefaultEdge> createDirectedGraph() {
         DirectedGraph<URL, DefaultEdge> g =
                 new DefaultDirectedGraph<URL, DefaultEdge>(DefaultEdge.class);
 
@@ -43,6 +65,7 @@ public class GraphFactory {
             g.addVertex(amazon);
             g.addVertex(yahoo);
             g.addVertex(ebay);
+
 
             g.addEdge(yahoo, amazon);
             g.addEdge(yahoo, ebay);
@@ -60,7 +83,7 @@ public class GraphFactory {
      *
      * * @return a graph based on String objects.
      */
-    private static UndirectedGraph<String, DefaultEdge> createUndirectedGraph() {
+    public static UndirectedGraph<String, DefaultEdge> createUndirectedGraph() {
         UndirectedGraph<String, DefaultEdge> g =
                 new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 

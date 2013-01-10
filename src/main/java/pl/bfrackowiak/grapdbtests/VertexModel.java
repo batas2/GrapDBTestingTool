@@ -12,10 +12,17 @@ import java.util.Random;
  */
 public class VertexModel {
 
-    private int idVal;
+    private long idVal;
     private int intVal;
     private double doubleVal;
     private String stringVal;
+
+    public VertexModel() {
+    }
+
+    public VertexModel(int id) {
+        idVal = id;
+    }
 
     public VertexModel(int intVal, double doubleVal, String stringVal) {
         this.intVal = intVal;
@@ -23,11 +30,11 @@ public class VertexModel {
         this.stringVal = stringVal;
     }
 
-    public int getIdVal() {
+    public long getIdVal() {
         return idVal;
     }
 
-    public void setIdVal(int idVal) {
+    public void setIdVal(long idVal) {
         this.idVal = idVal;
     }
 
