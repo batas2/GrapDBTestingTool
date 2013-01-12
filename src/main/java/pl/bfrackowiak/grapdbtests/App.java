@@ -1,5 +1,7 @@
 package pl.bfrackowiak.grapdbtests;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.List;
 import org.jgrapht.Graph;
 import pl.bfrackowiak.TestsScenario.Commands.ScenarioCommand;
@@ -23,20 +25,31 @@ public class App {
         RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
         ScenarioExecutor scenarioExecutor = new ScenarioExecutor();
 
-        for (int scenarioLength = MIN_SCENARIO_LENGTH; scenarioLength < MAX_SCENARIO_LENGTH; scenarioLength += SCENARIO_STEP) {
-            List<ScenarioCommand> scenario = scenarioGenerator.getScenario(scenarioLength);
+        try {
+            PrintWriter postgresOut = new PrintWriter(new FileWriter("postgres.out"));
+            PrintWriter neo4jOut = new PrintWriter(new FileWriter("neo4j.out"));
+            PrintWriter titanOut = new PrintWriter(new FileWriter("titan.out"));
 
-            GraphDAO postgres = new PostgresSQLImp();
-            long postgresTime = scenarioExecutor.Execute(scenario, postgres);
-            System.out.println("Length: " + scenarioLength + "PostgresSQL: " + postgresTime);
+            for (int scenarioLength = MIN_SCENARIO_LENGTH; scenarioLength < MAX_SCENARIO_LENGTH; scenarioLength += SCENARIO_STEP) {
+                List<ScenarioCommand> scenario = scenarioGenerator.getScenario(scenarioLength);
 
-            GraphDAO neo4j = new Neo4JImp();
-            long neo4jTime = scenarioExecutor.Execute(scenario, neo4j);
-            System.out.println("Length: " + scenarioLength + "Neo4J: " + postgresTime);
+                GraphDAO postgres = new PostgresSQLImp();
+                long postgresTime = scenarioExecutor.Execute(scenario, postgres);
+                postgresOut.println(scenarioLength + ";" + postgresTime);
 
-            GraphDAO titan = new TitanImp();
-            long titanTime = scenarioExecutor.Execute(scenario, titan);
-            System.out.println("Length: " + scenarioLength + "Titan: " + postgresTime);
+                GraphDAO neo4j = new Neo4JImp();
+                long neo4jTime = scenarioExecutor.Execute(scenario, neo4j);
+                neo4jOut.println(scenarioLength + ";" + postgresTime);
+
+                GraphDAO titan = new TitanImp();
+                long titanTime = scenarioExecutor.Execute(scenario, titan);
+                titanOut.println(scenarioLength + ";" + postgresTime);
+            }
+            postgresOut.close();
+            neo4jOut.close();
+            titanOut.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
