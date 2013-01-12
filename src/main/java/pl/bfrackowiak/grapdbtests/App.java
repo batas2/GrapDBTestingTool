@@ -15,31 +15,22 @@ public class App {
     public static void main(String[] args) {
 
         Graph graph = GraphFactory.getRandomGrap(4, 8);
-        
+
         RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
 
         List<ScenarioCommand> scenario = scenarioGenerator.getScenario(20);
         ScenarioExecutor scenarioExecutor = new ScenarioExecutor(scenario);
 
+//        GraphDAO postgres = new PostgresSQLImp();
+//        long postgresTime = scenarioExecutor.Execute(postgres);
+//        System.out.println("PostgresSQL Execution time was " + postgresTime + " ms.");
+//
+//        GraphDAO neo4j = new Neo4JImp();
+//        long neo4jTime = scenarioExecutor.Execute(neo4j);
+//        System.out.println("Neo4j Execution time was " + neo4jTime + " ms.");
 
-        GraphDAO neo4j = new Neo4JImp();
-        GraphDAO postgres = new PostgresSQLImp();
-
-        long start = System.currentTimeMillis();
-
-        scenarioExecutor.Execute(postgres);
-
-        long end = System.currentTimeMillis();
-
-        System.out.println("PostgresSQL Execution time was " + (end - start) + " ms.");
-
-        start = System.currentTimeMillis();
-
-        scenarioExecutor.Execute(neo4j);
-
-        end = System.currentTimeMillis();
-
-        System.out.println("Neo4j Execution time was " + (end - start) + " ms.");
-
+        GraphDAO titan = new TitanImp();
+        long titanTime = scenarioExecutor.Execute(titan);
+        System.out.println("Titan Execution time was " + titanTime + " ms.");
     }
 }

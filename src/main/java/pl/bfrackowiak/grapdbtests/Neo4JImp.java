@@ -7,7 +7,6 @@ package pl.bfrackowiak.grapdbtests;
 import java.io.File;
 import java.io.IOException;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -24,13 +23,7 @@ import org.neo4j.kernel.impl.util.FileUtils;
 public class Neo4JImp implements GraphDAO {
 
     private static final String DB_PATH = "target/neo4j-tests-db";
-    String greeting;
-    // START SNIPPET: vars
     GraphDatabaseService graphDb;
-    Node firstNode;
-    Node secondNode;
-    Relationship relationship;
-    // END SNIPPET: vars
 
     @Override
     public void init() {
@@ -45,18 +38,11 @@ public class Neo4JImp implements GraphDAO {
         Transaction tx = graphDb.beginTx();
         try {
             for (VertexModel vertex : graph.vertexSet()) {
-                Node node = graphDb.createNode();
-                node.setProperty("intVal", vertex.getIntVal());
-                node.setProperty("doubleVal", vertex.getDoubleVal());
-                node.setProperty("stringVal", vertex.getStringVal());
-                vertex.setIdVal(node.getId());
+                createVertex(vertex);
             }
 
             for (WeightedEdge edge : graph.edgeSet()) {
-                Node source = graphDb.getNodeById(edge.getSource().getIdVal());
-                Node target = graphDb.getNodeById(edge.getTarget().getIdVal());
-
-                source.createRelationshipTo(target, RelTypes.KNOWS);
+                createEdge(edge.getSource(), edge.getTarget());
             }
             tx.success();
         } catch (Exception ex) {
@@ -171,15 +157,13 @@ public class Neo4JImp implements GraphDAO {
 
     @Override
     public void dispose() {
-
+        graphDb.shutdown();
     }
 
-    // START SNIPPET: createReltype
     private static enum RelTypes implements RelationshipType {
 
         KNOWS
     }
-    // END SNIPPET: createReltype
 
     private void clearDb() {
         try {
@@ -189,35 +173,7 @@ public class Neo4JImp implements GraphDAO {
         }
     }
 
-//    void removeData() {
-//        Transaction tx = graphDb.beginTx();
-//        try {
-//            // START SNIPPET: removingData
-//            // let's remove the data
-//            firstNode.getSingleRelationship(RelTypes.KNOWS, Direction.OUTGOING).delete();
-//            firstNode.delete();
-//            secondNode.delete();
-//            // END SNIPPET: removingData
-//
-//            tx.success();
-//        } finally {
-//            tx.finish();
-//        }
-//    }
-
-    void shutDown() {
-        System.out.println();
-        System.out.println("Shutting down database ...");
-        // START SNIPPET: shutdownServer
-        graphDb.shutdown();
-        // END SNIPPET: shutdownServer
-    }
-
-    // START SNIPPET: shutdownHook
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {
-        // Registers a shutdown hook for the Neo4j instance so that it
-        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-        // running example before it's completed)
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
@@ -225,5 +181,4 @@ public class Neo4JImp implements GraphDAO {
             }
         });
     }
-    // END SNIPPET: shutdownHook    
 }

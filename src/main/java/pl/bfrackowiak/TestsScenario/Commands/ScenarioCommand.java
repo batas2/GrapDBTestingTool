@@ -4,7 +4,6 @@
  */
 package pl.bfrackowiak.TestsScenario.Commands;
 
-import org.jgrapht.Graph;
 import pl.bfrackowiak.grapdbtests.GraphDAO;
 
 /**

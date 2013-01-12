@@ -12,22 +12,27 @@ import pl.bfrackowiak.grapdbtests.GraphDAO;
  *
  * @author Bartosz
  */
-public class ScenarioExecutor implements ScenarioCommand {
-    
+public class ScenarioExecutor {
+
     private List<ScenarioCommand> scenario;
-    
+
     public ScenarioExecutor(List<ScenarioCommand> scenario) {
         this.scenario = scenario;
     }
-    
-    @Override
-    public void Execute(GraphDAO graphDAO) {
+
+    public long Execute(GraphDAO graphDAO) {
         graphDAO.init();
-        
+
+        long start = System.currentTimeMillis();
+
         for (ScenarioCommand command : scenario) {
             command.Execute(graphDAO);
         }
-        
+
+        long end = System.currentTimeMillis();
+
         graphDAO.dispose();
+
+        return end - start;
     }
 }
