@@ -48,7 +48,7 @@ public class PostgresSQLImp implements GraphDAO {
 
             }
             for (WeightedEdge edge : graph.edgeSet()) {
-                Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Edges\"(\"src\", \"target\")  VALUES ('" + edge.getSource().getIdVal() + "', '" + edge.getSource().getIdVal()+ "');");
+                Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Edges\"(\"src\", \"target\")  VALUES ('" + edge.getSource().getIdVal() + "', '" + edge.getSource().getIdVal() + "');");
                 createNativeQuery.executeUpdate();
             }
             connection.getTransaction().commit();
@@ -86,7 +86,7 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Edges\" WHERE \"src\" ='" + from.getIdVal() + "' AND \"target\" = '" + to.getIdVal()+ "';");
+            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Edges\" WHERE \"src\" ='" + from.getIdVal() + "' AND \"target\" = '" + to.getIdVal() + "';");
             createNativeQuery.executeUpdate();
 
             connection.getTransaction().commit();
@@ -125,7 +125,7 @@ public class PostgresSQLImp implements GraphDAO {
             connection.getTransaction().begin();
 
 
-            Query createNativeQuery = connection.createNativeQuery("UPDATE \"Vertex\" SET \"IntVal\"='" + vertex.getIntVal() + "', \"doubleVal\"='" + vertex.getDoubleVal() + "', \"stringVal\"='" + vertex.getStringVal()+ "';");
+            Query createNativeQuery = connection.createNativeQuery("UPDATE \"Vertex\" SET \"IntVal\"='" + vertex.getIntVal() + "', \"doubleVal\"='" + vertex.getDoubleVal() + "', \"stringVal\"='" + vertex.getStringVal() + "';");
             createNativeQuery.executeUpdate();
 
 
@@ -145,7 +145,7 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Vertex\" WHERE \"Id\" ='" + vertex.getIdVal()+"'");
+            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Vertex\" WHERE \"Id\" ='" + vertex.getIdVal() + "'");
             createNativeQuery.executeUpdate();
 
             connection.getTransaction().commit();
@@ -164,7 +164,7 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery("SELECT \"Id\", \"IntVal\", \"doubleVal\", \"stringVal\"  FROM \"Vertex\" WHERE \"Id\" = '" + vertex.getIdVal()+"';");
+            Query query = connection.createNativeQuery("SELECT \"Id\", \"IntVal\", \"doubleVal\", \"stringVal\"  FROM \"Vertex\" WHERE \"Id\" = '" + vertex.getIdVal() + "';");
             for (Object v : query.getResultList()) {
             }
 
@@ -181,7 +181,7 @@ public class PostgresSQLImp implements GraphDAO {
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
     private void InitDataBase() throws IOException {

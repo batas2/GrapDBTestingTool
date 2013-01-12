@@ -18,6 +18,7 @@ public class UpdateVertexCommand implements ScenarioCommand {
 
     public UpdateVertexCommand(VertexModel vertexModel, VertexModel newVal) {
         this.vertexModel = vertexModel;
+        this.newVal = newVal;
     }
 
     public VertexModel getVertexModel() {
@@ -28,7 +29,6 @@ public class UpdateVertexCommand implements ScenarioCommand {
         return newVal;
     }
 
-    
     @Override
     public void Execute(GraphDAO graphDAO) {
         graphDAO.updateVertex(vertexModel, newVal);
@@ -38,5 +38,4 @@ public class UpdateVertexCommand implements ScenarioCommand {
     public String toString() {
         return "UpdateVertexCommand{" + "vertexModel=" + vertexModel + ", newVal=" + newVal + '}';
     }
-    
 }

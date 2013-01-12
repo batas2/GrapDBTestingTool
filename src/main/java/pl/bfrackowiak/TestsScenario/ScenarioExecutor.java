@@ -22,8 +22,12 @@ public class ScenarioExecutor implements ScenarioCommand {
     
     @Override
     public void Execute(GraphDAO graphDAO) {
+        graphDAO.init();
+        
         for (ScenarioCommand command : scenario) {
             command.Execute(graphDAO);
         }
+        
+        graphDAO.dispose();
     }
 }

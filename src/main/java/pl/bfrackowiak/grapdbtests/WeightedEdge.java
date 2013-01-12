@@ -4,28 +4,24 @@
  */
 package pl.bfrackowiak.grapdbtests;
 
-import javax.persistence.Entity;
-import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.DefaultEdge;
 
 /**
  *
  * @author Bartosz
  */
-@Entity
-public class WeightedEdge extends DefaultWeightedEdge {
+public class WeightedEdge extends DefaultEdge {
 
     public WeightedEdge() {
     }
 
-    public double getWeight() {
-        return getWeight();
-    }
-
+    @Override
     public VertexModel getSource() {
-        return getSource();
+        return (VertexModel) super.getSource();
     }
 
+    @Override
     public VertexModel getTarget() {
-        return getTarget();
+        return (VertexModel) super.getTarget();
     }
 }

@@ -32,50 +32,12 @@ public class Neo4JImp implements GraphDAO {
     Relationship relationship;
     // END SNIPPET: vars
 
-    public Neo4JImp() {
-        init();
-    }
-
     @Override
     public void init() {
         clearDb();
 
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
         registerShutdownHook(graphDb);
-
-
-        // START SNIPPET: transaction
-        Transaction tx = graphDb.beginTx();
-        try {
-            // Updating operations go here
-            // END SNIPPET: transaction
-            // START SNIPPET: addData
-            firstNode = graphDb.createNode();
-            firstNode.setProperty("message", "Hello, ");
-            secondNode = graphDb.createNode();
-            secondNode.setProperty("message", "World!");
-
-
-            relationship = firstNode.createRelationshipTo(secondNode, RelTypes.KNOWS);
-            relationship.setProperty("message", "brave Neo4j ");
-            // END SNIPPET: addData
-
-            // START SNIPPET: readData
-            System.out.print(firstNode.getProperty("message"));
-            System.out.print(relationship.getProperty("message"));
-            System.out.print(secondNode.getProperty("message"));
-            // END SNIPPET: readData
-
-            greeting = ((String) firstNode.getProperty("message"))
-                    + ((String) relationship.getProperty("message"))
-                    + ((String) secondNode.getProperty("message"));
-
-            // START SNIPPET: transaction
-            tx.success();
-        } finally {
-            tx.finish();
-        }
-        // END SNIPPET: transaction
     }
 
     @Override
@@ -209,7 +171,7 @@ public class Neo4JImp implements GraphDAO {
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
     // START SNIPPET: createReltype
@@ -227,21 +189,21 @@ public class Neo4JImp implements GraphDAO {
         }
     }
 
-    void removeData() {
-        Transaction tx = graphDb.beginTx();
-        try {
-            // START SNIPPET: removingData
-            // let's remove the data
-            firstNode.getSingleRelationship(RelTypes.KNOWS, Direction.OUTGOING).delete();
-            firstNode.delete();
-            secondNode.delete();
-            // END SNIPPET: removingData
-
-            tx.success();
-        } finally {
-            tx.finish();
-        }
-    }
+//    void removeData() {
+//        Transaction tx = graphDb.beginTx();
+//        try {
+//            // START SNIPPET: removingData
+//            // let's remove the data
+//            firstNode.getSingleRelationship(RelTypes.KNOWS, Direction.OUTGOING).delete();
+//            firstNode.delete();
+//            secondNode.delete();
+//            // END SNIPPET: removingData
+//
+//            tx.success();
+//        } finally {
+//            tx.finish();
+//        }
+//    }
 
     void shutDown() {
         System.out.println();

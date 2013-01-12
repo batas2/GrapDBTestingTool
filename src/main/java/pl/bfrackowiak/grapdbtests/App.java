@@ -14,17 +14,16 @@ public class App {
 
     public static void main(String[] args) {
 
-        Graph graph = GraphFactory.getRandomGrap(20, 40);
+        Graph graph = GraphFactory.getRandomGrap(4, 8);
+        
         RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
 
-        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(200);
+        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(20);
         ScenarioExecutor scenarioExecutor = new ScenarioExecutor(scenario);
 
 
         GraphDAO neo4j = new Neo4JImp();
-
         GraphDAO postgres = new PostgresSQLImp();
-        postgres.init();
 
         long start = System.currentTimeMillis();
 

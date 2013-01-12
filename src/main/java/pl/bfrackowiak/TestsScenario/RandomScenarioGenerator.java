@@ -6,6 +6,7 @@ import java.util.Random;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import pl.bfrackowiak.TestsScenario.Commands.CreateEdgeCommand;
+import pl.bfrackowiak.TestsScenario.Commands.CreateGraphCommand;
 import pl.bfrackowiak.TestsScenario.Commands.CreateVertexCommnad;
 import pl.bfrackowiak.TestsScenario.Commands.ReadVertexCommand;
 import pl.bfrackowiak.TestsScenario.Commands.RemoveEdgeCommand;
@@ -38,6 +39,8 @@ public class RandomScenarioGenerator implements Scenario {
     @Override
     public List<ScenarioCommand> getScenario(int length) {
         List<ScenarioCommand> scenario = new LinkedList<ScenarioCommand>();
+
+        scenario.add(new CreateGraphCommand(graph));
 
         for (int i = 0; i < length; i++) {
             int index = rand.nextInt(6);
