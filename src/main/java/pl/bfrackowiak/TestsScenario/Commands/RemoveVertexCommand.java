@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.TestsScenario.Commands;
 
 import pl.bfrackowiak.grapdbtests.GraphDAO;
 import pl.bfrackowiak.grapdbtests.VertexModel;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class RemoveVertexCommand implements ScenarioCommand {
 

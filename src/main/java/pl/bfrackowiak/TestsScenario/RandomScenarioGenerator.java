@@ -16,8 +16,8 @@ import pl.bfrackowiak.TestsScenario.Commands.UpdateVertexCommand;
 import pl.bfrackowiak.grapdbtests.VertexModel;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class RandomScenarioGenerator implements Scenario {
 

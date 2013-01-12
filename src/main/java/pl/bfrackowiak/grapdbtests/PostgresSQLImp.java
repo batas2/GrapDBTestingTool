@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.grapdbtests;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,13 +11,18 @@ import javax.persistence.Query;
 import org.jgrapht.Graph;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class PostgresSQLImp implements GraphDAO {
 
     private static final String PERSISTENCE_UNIT_NAME = "PostgresPersistenceProvider";
     private static final String POSRTGRES_SQL_RESETSQL = "/PosrtgresSqlReset.sql";
+    private static final String INSERT_VERTEX_QUERY = "INSERT INTO \"Vertex\"(\"Id\", \"IntVal\", \"doubleVal\", \"stringVal\")  VALUES ('%d', '%d', '%f', '%s');";
+    private static final String UPDATE_VERTEX_QUERY = "UPDATE \"Vertex\" SET \"IntVal\"='%d', \"doubleVal\"='%f', \"stringVal\"='%s';";
+    private static final String READ_VERTEX_QUERY = "SELECT \"Id\", \"IntVal\", \"doubleVal\", \"stringVal\"  FROM \"Vertex\" WHERE \"Id\" = '%d';";
+    private static final String DELETE_VERTEX_QUERY = "DELETE FROM \"Vertex\" WHERE \"Id\" ='%d';";
+    private static final String INSERT_EDGE_QUERY = "INSERT INTO \"Edges\"(\"src\", \"target\")  VALUES ('%d', '%d');";
+    private static final String DELETE_EDGE_QUERY = "DELETE FROM \"Edges\" WHERE \"src\" ='%d' AND \"target\" = '%d';";
     private EntityManager connection;
 
     @Override
@@ -40,25 +42,11 @@ public class PostgresSQLImp implements GraphDAO {
 
     @Override
     public void create(Graph<VertexModel, WeightedEdge> graph) {
-        try {
-            connection.getTransaction().begin();
-            for (VertexModel vertex : graph.vertexSet()) {
-                Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Vertex\"(\"Id\", \"IntVal\", \"doubleVal\", \"stringVal\")  VALUES ('" + vertex.getIdVal() + "', '" + vertex.getIntVal() + "', '" + vertex.getDoubleVal() + "', '" + vertex.getStringVal() + "');");
-                createNativeQuery.executeUpdate();
-
-            }
-            for (WeightedEdge edge : graph.edgeSet()) {
-                Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Edges\"(\"src\", \"target\")  VALUES ('" + edge.getSource().getIdVal() + "', '" + edge.getSource().getIdVal() + "');");
-                createNativeQuery.executeUpdate();
-            }
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+        for (VertexModel vertex : graph.vertexSet()) {
+            createVertex(vertex);
+        }
+        for (WeightedEdge edge : graph.edgeSet()) {
+            createEdge(edge.getSource(), edge.getTarget());
         }
     }
 
@@ -67,17 +55,13 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Edges\"(\"src\", \"target\")  VALUES ('" + from.getIdVal() + "', '" + to.getIdVal() + "');");
-            createNativeQuery.executeUpdate();
+            Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
+            query.executeUpdate();
 
             connection.getTransaction().commit();
         } catch (Exception e) {
+            connection.getTransaction().rollback();
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
         }
     }
 
@@ -86,17 +70,13 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Edges\" WHERE \"src\" ='" + from.getIdVal() + "' AND \"target\" = '" + to.getIdVal() + "';");
-            createNativeQuery.executeUpdate();
+            Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
+            query.executeUpdate();
 
             connection.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+            connection.getTransaction().rollback();
         }
     }
 
@@ -105,17 +85,13 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("INSERT INTO \"Vertex\"(\"Id\", \"IntVal\", \"doubleVal\", \"stringVal\")  VALUES ('" + vertexModel.getIdVal() + "', '" + vertexModel.getIntVal() + "', '" + vertexModel.getDoubleVal() + "', '" + vertexModel.getStringVal() + "');");
-            createNativeQuery.executeUpdate();
+            Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_VERTEX_QUERY, vertexModel.getIdVal(), vertexModel.getIntVal(), vertexModel.getDoubleVal(), vertexModel.getStringVal()));
+            query.executeUpdate();
 
             connection.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+            connection.getTransaction().rollback();
         }
     }
 
@@ -124,19 +100,13 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-
-            Query createNativeQuery = connection.createNativeQuery("UPDATE \"Vertex\" SET \"IntVal\"='" + vertex.getIntVal() + "', \"doubleVal\"='" + vertex.getDoubleVal() + "', \"stringVal\"='" + vertex.getStringVal() + "';");
-            createNativeQuery.executeUpdate();
-
+            Query query = connection.createNativeQuery(String.format(Locale.US, UPDATE_VERTEX_QUERY, vertex.getIntVal(), vertex.getDoubleVal(), vertex.getStringVal()));
+            query.executeUpdate();
 
             connection.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+            connection.getTransaction().rollback();
         }
     }
 
@@ -145,17 +115,13 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query createNativeQuery = connection.createNativeQuery("DELETE FROM \"Vertex\" WHERE \"Id\" ='" + vertex.getIdVal() + "'");
-            createNativeQuery.executeUpdate();
+            Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_VERTEX_QUERY, vertex.getIdVal()));
+            query.executeUpdate();
 
             connection.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+            connection.getTransaction().rollback();
         }
     }
 
@@ -164,24 +130,20 @@ public class PostgresSQLImp implements GraphDAO {
         try {
             connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery("SELECT \"Id\", \"IntVal\", \"doubleVal\", \"stringVal\"  FROM \"Vertex\" WHERE \"Id\" = '" + vertex.getIdVal() + "';");
+            Query query = connection.createNativeQuery(String.format(Locale.US, READ_VERTEX_QUERY, vertex.getIdVal()));
+
             for (Object v : query.getResultList()) {
             }
 
             connection.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e);
-//            try {
-//                connection.getTransaction().rollback();
-//            } catch (Exception ex) {
-//                System.out.println(ex);
-//            }
+            connection.getTransaction().rollback();
         }
     }
 
     @Override
     public void dispose() {
-        
     }
 
     private void InitDataBase() throws IOException {

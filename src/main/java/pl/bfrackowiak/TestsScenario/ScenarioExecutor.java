@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.TestsScenario;
 
 import java.util.List;
@@ -9,18 +5,11 @@ import pl.bfrackowiak.TestsScenario.Commands.ScenarioCommand;
 import pl.bfrackowiak.grapdbtests.GraphDAO;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class ScenarioExecutor {
 
-    private List<ScenarioCommand> scenario;
-
-    public ScenarioExecutor(List<ScenarioCommand> scenario) {
-        this.scenario = scenario;
-    }
-
-    public long Execute(GraphDAO graphDAO) {
+    public long Execute(List<ScenarioCommand> scenario, GraphDAO graphDAO) {
         graphDAO.init();
 
         long start = System.currentTimeMillis();

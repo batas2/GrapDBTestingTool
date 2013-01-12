@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.grapdbtests;
 
 import com.google.common.collect.Lists;
@@ -17,13 +13,13 @@ import java.util.List;
 import org.jgrapht.Graph;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class TitanImp implements GraphDAO {
 
     private static final String DB_PATH = "target/titan-tests-db";
-    public static final String KNOWS = "knows";
+    private static final String KNOWS = "knows";
     private TitanGraph graphDb;
     private HashMap<Long, Vertex> vertexMapping;
 
@@ -34,6 +30,7 @@ public class TitanImp implements GraphDAO {
     @Override
     public void init() {
         graphDb = TitanFactory.open(DB_PATH);
+        //graphDb = TitanFactory.openInMemoryGraph();
     }
 
     private Vertex getVertexById(long id) {
@@ -55,7 +52,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -75,7 +72,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -86,22 +83,22 @@ public class TitanImp implements GraphDAO {
             Vertex fromVertex = getVertexById(from.getIdVal());
             Vertex toVertex = getVertexById(to.getIdVal());
 
-            if (fromVertex != null && toVertex != null) {
-                Iterable<Edge> edges = fromVertex.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS);
-                for (Edge edge : edges) {
+            //if (fromVertex != null && toVertex != null) {
+            Iterable<Edge> edges = fromVertex.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS);
+            for (Edge edge : edges) {
 
-                    Vertex inVertex = edge.getVertex(Direction.IN);
+                Vertex inVertex = edge.getVertex(Direction.IN);
 
-                    if (inVertex.getId() == toVertex.getId()) {
-                        graphDb.removeEdge(edge);
-                    }
+                if (inVertex.getId() == toVertex.getId()) {
+                    graphDb.removeEdge(edge);
                 }
             }
+            // }
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -120,7 +117,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -138,7 +135,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -147,18 +144,19 @@ public class TitanImp implements GraphDAO {
         TitanTransaction tx = graphDb.startTransaction();
         try {
             Vertex node = getVertexById(vertex.getIdVal());
+            if (node != null) {
+                for (Edge e : node.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS)) {
+                    graphDb.removeEdge(e);
+                }
 
-            for (Edge e : node.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS)) {
-                graphDb.removeEdge(e);
+                graphDb.removeVertex(node);
+                vertexMapping.remove(vertex.getIdVal());
             }
-
-            graphDb.removeVertex(node);
-
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 
@@ -171,7 +169,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            
+
         }
     }
 

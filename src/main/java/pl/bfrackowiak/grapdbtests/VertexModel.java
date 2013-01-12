@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.grapdbtests;
 
 import java.util.Random;
@@ -11,8 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 @Entity
 public class VertexModel {

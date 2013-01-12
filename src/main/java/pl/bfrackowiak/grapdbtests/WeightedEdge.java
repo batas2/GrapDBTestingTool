@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.grapdbtests;
 
 import org.jgrapht.graph.DefaultEdge;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class WeightedEdge extends DefaultEdge {
 

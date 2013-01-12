@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.TestsScenario.Commands;
 
 import org.jgrapht.Graph;
@@ -10,8 +6,8 @@ import pl.bfrackowiak.grapdbtests.VertexModel;
 import pl.bfrackowiak.grapdbtests.WeightedEdge;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class CreateGraphCommand implements ScenarioCommand {
 

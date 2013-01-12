@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.bfrackowiak.grapdbtests;
 
 import java.io.File;
@@ -17,8 +13,8 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.kernel.impl.util.FileUtils;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public class Neo4JImp implements GraphDAO {
 
@@ -30,6 +26,7 @@ public class Neo4JImp implements GraphDAO {
         clearDb();
 
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
+        
         registerShutdownHook(graphDb);
     }
 

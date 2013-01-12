@@ -7,30 +7,59 @@ import pl.bfrackowiak.TestsScenario.RandomScenarioGenerator;
 import pl.bfrackowiak.TestsScenario.ScenarioExecutor;
 
 /**
- * Hello world!
- *
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class App {
 
+    public static final int MIN_SCENARIO_LENGTH = 500;
+    public static final int MAX_SCENARIO_LENGTH = 5000;
+    public static final int SCENARIO_STEP = 500;
+    public static final int VERTEX_COUNT = 1000;
+    public static final int EDGE_COUNT = 2000;
+
+    private static void RandomScenario() {
+
+        Graph graph = GraphFactory.getRandomGrap(VERTEX_COUNT, EDGE_COUNT);
+        RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
+        ScenarioExecutor scenarioExecutor = new ScenarioExecutor();
+
+        for (int scenarioLength = MIN_SCENARIO_LENGTH; scenarioLength < MAX_SCENARIO_LENGTH; scenarioLength += SCENARIO_STEP) {
+            List<ScenarioCommand> scenario = scenarioGenerator.getScenario(scenarioLength);
+
+            GraphDAO postgres = new PostgresSQLImp();
+            long postgresTime = scenarioExecutor.Execute(scenario, postgres);
+            System.out.println("Length: " + scenarioLength + "PostgresSQL: " + postgresTime);
+
+            GraphDAO neo4j = new Neo4JImp();
+            long neo4jTime = scenarioExecutor.Execute(scenario, neo4j);
+            System.out.println("Length: " + scenarioLength + "Neo4J: " + postgresTime);
+
+            GraphDAO titan = new TitanImp();
+            long titanTime = scenarioExecutor.Execute(scenario, titan);
+            System.out.println("Length: " + scenarioLength + "Titan: " + postgresTime);
+        }
+    }
+
     public static void main(String[] args) {
 
-        Graph graph = GraphFactory.getRandomGrap(4, 8);
-
-        RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
-
-        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(20);
-        ScenarioExecutor scenarioExecutor = new ScenarioExecutor(scenario);
-
+        RandomScenario();
+//        Graph graph = GraphFactory.getRandomGrap(4, 8);
+//
+//        RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator(graph);
+//
+//        List<ScenarioCommand> scenario = scenarioGenerator.getScenario(20);
+//        ScenarioExecutor scenarioExecutor = new ScenarioExecutor();
+//
 //        GraphDAO postgres = new PostgresSQLImp();
-//        long postgresTime = scenarioExecutor.Execute(postgres);
+//        long postgresTime = scenarioExecutor.Execute(scenario, postgres);
 //        System.out.println("PostgresSQL Execution time was " + postgresTime + " ms.");
 //
 //        GraphDAO neo4j = new Neo4JImp();
-//        long neo4jTime = scenarioExecutor.Execute(neo4j);
+//        long neo4jTime = scenarioExecutor.Execute(scenario, neo4j);
 //        System.out.println("Neo4j Execution time was " + neo4jTime + " ms.");
-
-        GraphDAO titan = new TitanImp();
-        long titanTime = scenarioExecutor.Execute(titan);
-        System.out.println("Titan Execution time was " + titanTime + " ms.");
+//
+//        GraphDAO titan = new TitanImp();
+//        long titanTime = scenarioExecutor.Execute(scenario, titan);
+//        System.out.println("Titan Execution time was " + titanTime + " ms.");
     }
 }

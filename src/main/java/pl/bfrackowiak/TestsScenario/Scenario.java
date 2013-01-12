@@ -4,8 +4,8 @@ import java.util.List;
 import pl.bfrackowiak.TestsScenario.Commands.ScenarioCommand;
 
 /**
- *
- * @author Bartosz
+ * @author Bartosz Frackowiak
+ * http://bfrackowiak.pl/
  */
 public interface Scenario {
 
