@@ -14,7 +14,7 @@ import pl.bfrackowiak.TestsScenario.ScenarioExecutor;
 public class App {
 
     public static final int MIN_SCENARIO_LENGTH = 500;
-    public static final int MAX_SCENARIO_LENGTH = 5000;
+    public static final int MAX_SCENARIO_LENGTH = 5001;
     public static final int SCENARIO_STEP = 500;
     public static final int VERTEX_COUNT = 1000;
     public static final int EDGE_COUNT = 2000;
@@ -39,11 +39,11 @@ public class App {
 
                 GraphDAO neo4j = new Neo4JImp();
                 long neo4jTime = scenarioExecutor.Execute(scenario, neo4j);
-                neo4jOut.println(scenarioLength + ";" + postgresTime);
+                neo4jOut.println(scenarioLength + ";" + neo4jTime);
 
                 GraphDAO titan = new TitanImp();
                 long titanTime = scenarioExecutor.Execute(scenario, titan);
-                titanOut.println(scenarioLength + ";" + postgresTime);
+                titanOut.println(scenarioLength + ";" + titan);
             }
             postgresOut.close();
             neo4jOut.close();
