@@ -6,8 +6,7 @@ import pl.bfrackowiak.grapdbtests.VertexModel;
 import pl.bfrackowiak.grapdbtests.WeightedEdge;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class CreateGraphCommand implements ScenarioCommand {
 
@@ -20,5 +19,10 @@ public class CreateGraphCommand implements ScenarioCommand {
     @Override
     public void Execute(GraphDAO graphDAO) {
         graphDAO.create(graph);
+    }
+
+    @Override
+    public String toString() {
+        return "CreateGraphCommand{" + "graph=" + graph + '}';
     }
 }
