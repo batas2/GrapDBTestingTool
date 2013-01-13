@@ -55,13 +55,15 @@ public class TitanImp implements GraphDAO {
             Vertex source = getVertexById(from.getIdVal());
             Vertex target = getVertexById(to.getIdVal());
 
-            graphDb.addEdge(null, source, target, KNOWS);
+            if (source != null && target != null) {
+                graphDb.addEdge(null, source, target, KNOWS);
+            }
 
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
@@ -87,7 +89,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
@@ -106,7 +108,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
@@ -124,7 +126,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
@@ -145,7 +147,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
@@ -158,7 +160,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 
