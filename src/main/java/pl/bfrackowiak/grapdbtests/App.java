@@ -30,7 +30,6 @@ public class App {
         RandomScenarioGenerator scenarioGenerator = new RandomScenarioGenerator();
         ScenarioExecutor scenarioExecutor = new ScenarioExecutor();
 
-
         PrintWriter out = new PrintWriter(new FileWriter("random_scenario.csv"));
 
         for (int scenarioLength = MIN_SCENARIO_LENGTH; scenarioLength < MAX_SCENARIO_LENGTH; scenarioLength += SCENARIO_STEP) {
@@ -47,7 +46,7 @@ public class App {
 
             out.println(scenarioLength + "," + postgresTime + "," + neo4j + "," + titanTime);
         }
-
+        out.close();
     }
 
     public static void main(String[] args) {
