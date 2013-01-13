@@ -1,6 +1,5 @@
 package pl.bfrackowiak.grapdbtests;
 
-import com.google.common.collect.Lists;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanTransaction;
@@ -9,12 +8,10 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import org.jgrapht.Graph;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class TitanImp implements GraphDAO {
 
@@ -39,21 +36,15 @@ public class TitanImp implements GraphDAO {
 
     @Override
     public void create(Graph<VertexModel, WeightedEdge> graph) {
-        TitanTransaction tx = graphDb.startTransaction();
-        try {
-            for (VertexModel vertex : graph.vertexSet()) {
-                createVertex(vertex);
-            }
 
-            for (WeightedEdge edge : graph.edgeSet()) {
-                createEdge(edge.getSource(), edge.getTarget());
-            }
-            tx.commit();
-        } catch (Exception ex) {
-            tx.abort();
-            System.out.println(ex.getMessage());
-
+        for (VertexModel vertex : graph.vertexSet()) {
+            createVertex(vertex);
         }
+
+        for (WeightedEdge edge : graph.edgeSet()) {
+            createEdge(edge.getSource(), edge.getTarget());
+        }
+        vertexMapping = new HashMap<Long, Vertex>(graph.vertexSet().size() * 5);
     }
 
     @Override
@@ -61,10 +52,8 @@ public class TitanImp implements GraphDAO {
         TitanTransaction tx = graphDb.startTransaction();
         try {
 
-            List<Vertex> dbVertexList = Lists.newArrayList(graphDb.getVertices());
-
-            Vertex source = dbVertexList.get((int) from.getIdVal());
-            Vertex target = dbVertexList.get((int) to.getIdVal());
+            Vertex source = getVertexById(from.getIdVal());
+            Vertex target = getVertexById(to.getIdVal());
 
             graphDb.addEdge(null, source, target, KNOWS);
 
@@ -72,7 +61,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
@@ -84,7 +73,7 @@ public class TitanImp implements GraphDAO {
             Vertex toVertex = getVertexById(to.getIdVal());
 
             //if (fromVertex != null && toVertex != null) {
-            Iterable<Edge> edges = fromVertex.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS);
+            Iterable<Edge> edges = fromVertex.getEdges(Direction.OUT, KNOWS);
             for (Edge edge : edges) {
 
                 Vertex inVertex = edge.getVertex(Direction.IN);
@@ -98,7 +87,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
@@ -117,7 +106,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
@@ -135,7 +124,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
@@ -156,7 +145,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
@@ -169,7 +158,7 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
+            ex.printStackTrace();
         }
     }
 
