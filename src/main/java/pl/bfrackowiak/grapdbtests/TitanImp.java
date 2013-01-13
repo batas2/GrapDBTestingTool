@@ -7,7 +7,6 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import org.jgrapht.Graph;
 
 /**
@@ -19,10 +18,6 @@ public class TitanImp implements GraphDAO {
     private static final String KNOWS = "knows";
     private TitanGraph graphDb;
     private HashMap<Long, Vertex> vertexMapping;
-
-    public TitanImp() {
-        vertexMapping = new LinkedHashMap<Long, Vertex>();
-    }
 
     @Override
     public void init() {

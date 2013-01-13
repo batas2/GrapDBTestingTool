@@ -44,7 +44,7 @@ public class App {
             GraphDAO titan = new TitanImp();
             long titanTime = scenarioExecutor.Execute(scenario, titan);
 
-            out.println(scenarioLength + "," + postgresTime + "," + neo4j + "," + titanTime);
+            out.println(scenarioLength + "," + postgresTime + "," + neo4jTime + "," + titanTime);
         }
         out.close();
     }
