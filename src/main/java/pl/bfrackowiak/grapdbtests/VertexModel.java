@@ -1,5 +1,6 @@
 package pl.bfrackowiak.grapdbtests;
 
+import java.io.Serializable;
 import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,11 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 @Entity
-public class VertexModel {
+public class VertexModel implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,5 +73,12 @@ public class VertexModel {
     public static VertexModel getRandomVertex() {
         Random r = new Random();
         return new VertexModel(r.nextInt(), r.nextDouble(), "Random String" + r.nextInt());
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        VertexModel v = new VertexModel(intVal, doubleVal, stringVal);
+        v.setIdVal(idVal);
+        return v;
     }
 }

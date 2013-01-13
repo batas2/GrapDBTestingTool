@@ -13,8 +13,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.kernel.impl.util.FileUtils;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class Neo4JImp implements GraphDAO {
 
@@ -26,7 +25,7 @@ public class Neo4JImp implements GraphDAO {
         clearDb();
 
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
-        
+
         registerShutdownHook(graphDb);
     }
 
@@ -95,7 +94,7 @@ public class Neo4JImp implements GraphDAO {
             node.setProperty("intVal", vertexModel.getIntVal());
             node.setProperty("doubleVal", vertexModel.getDoubleVal());
             node.setProperty("stringVal", vertexModel.getStringVal());
-            vertexModel.setIdVal(node.getId());
+
             tx.success();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -126,9 +125,6 @@ public class Neo4JImp implements GraphDAO {
         try {
             Node node = graphDb.getNodeById(vertex.getIdVal());
 
-            for (Relationship r : node.getRelationships()) {
-                r.delete();
-            }
             node.delete();
 
             tx.success();

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 import pl.bfrackowiak.TestsScenario.Commands.CreateEdgeCommand;
 import pl.bfrackowiak.TestsScenario.Commands.CreateGraphCommand;
 import pl.bfrackowiak.TestsScenario.Commands.CreateVertexCommnad;
@@ -14,31 +13,31 @@ import pl.bfrackowiak.TestsScenario.Commands.RemoveVertexCommand;
 import pl.bfrackowiak.TestsScenario.Commands.ScenarioCommand;
 import pl.bfrackowiak.TestsScenario.Commands.UpdateVertexCommand;
 import pl.bfrackowiak.grapdbtests.VertexModel;
+import pl.bfrackowiak.grapdbtests.WeightedEdge;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public class RandomScenarioGenerator implements Scenario {
 
     private Random rand;
-    private Graph graph;
+    private Graph<VertexModel, WeightedEdge> graph;
     private int startVertexSetSize;
     private int startEdgeSetSize;
     private int vertexId;
 
-    public RandomScenarioGenerator(Graph<VertexModel, DefaultEdge> graph) {
-        this.graph = graph;
+    public RandomScenarioGenerator() {
         rand = new Random();
+    }
+
+    @Override
+    public List<ScenarioCommand> getScenario(Graph<VertexModel, WeightedEdge> graph, int length) {
+        this.graph = graph;
+        List<ScenarioCommand> scenario = new LinkedList<ScenarioCommand>();
 
         startVertexSetSize = graph.vertexSet().size();
         startEdgeSetSize = graph.edgeSet().size();
         vertexId = startVertexSetSize;
-    }
-
-    @Override
-    public List<ScenarioCommand> getScenario(int length) {
-        List<ScenarioCommand> scenario = new LinkedList<ScenarioCommand>();
 
         scenario.add(new CreateGraphCommand(graph));
 
@@ -52,7 +51,7 @@ public class RandomScenarioGenerator implements Scenario {
                     scenario.add(getDeleteEdgeCommand());
                     break;
                 case 2:
-                    scenario.add(getDeleteVertexCommand());
+                    scenario.addAll(getDeleteVertexCommand());
                     break;
                 case 3:
                     scenario.add(getUpdateVertexCommand());
@@ -82,26 +81,30 @@ public class RandomScenarioGenerator implements Scenario {
     private ScenarioCommand getDeleteEdgeCommand() {
 
         if (graph.edgeSet().size() > startEdgeSetSize) {
-            VertexModel vertexSrc = getRandomVertex();
-            VertexModel vertexDest = getRandomVertex();
 
-            graph.removeEdge(vertexSrc, vertexDest);
-            return new RemoveEdgeCommand(vertexSrc, vertexDest);
+            WeightedEdge edge = getRandomEdge();
+
+            graph.removeEdge(edge.getSource(), edge.getTarget());
+            return new RemoveEdgeCommand(edge.getSource(), edge.getTarget());
         } else {
             return getReadEdgeCommand();
         }
     }
 
-    private ScenarioCommand getDeleteVertexCommand() {
+    private List<ScenarioCommand> getDeleteVertexCommand() {
+        List<ScenarioCommand> commands = new LinkedList< ScenarioCommand>();
         if (graph.vertexSet().size() > startVertexSetSize) {
 
             VertexModel vertex = getRandomVertex();
+            for (WeightedEdge edge : graph.edgesOf(vertex)) {
+                commands.add(new RemoveEdgeCommand(edge.getSource(), edge.getTarget()));
+                graph.removeEdge(edge);
+            }
 
             graph.removeVertex(vertex);
-            return new RemoveVertexCommand(vertex);
-        } else {
-            return getReadEdgeCommand();
+            commands.add(new RemoveVertexCommand(vertex));
         }
+        return commands;
     }
 
     private ScenarioCommand getUpdateVertexCommand() {
@@ -121,6 +124,14 @@ public class RandomScenarioGenerator implements Scenario {
         newVertex.setIdVal(vertexId++);
         graph.addVertex(newVertex);
         return new CreateVertexCommnad(newVertex);
+    }
+
+    private WeightedEdge getRandomEdge() {
+        int edgeCount = graph.edgeSet().size();
+        int edgeIndex = rand.nextInt(edgeCount);
+
+        Object[] edges = graph.edgeSet().toArray();
+        return (WeightedEdge) edges[edgeIndex];
     }
 
     private VertexModel getRandomVertex() {

@@ -36,7 +36,7 @@ public class TitanImp implements GraphDAO {
 
     @Override
     public void create(Graph<VertexModel, WeightedEdge> graph) {
-
+        vertexMapping = new HashMap<Long, Vertex>(graph.vertexSet().size() * 5);
         for (VertexModel vertex : graph.vertexSet()) {
             createVertex(vertex);
         }
@@ -44,7 +44,7 @@ public class TitanImp implements GraphDAO {
         for (WeightedEdge edge : graph.edgeSet()) {
             createEdge(edge.getSource(), edge.getTarget());
         }
-        vertexMapping = new HashMap<Long, Vertex>(graph.vertexSet().size() * 5);
+
     }
 
     @Override
@@ -55,9 +55,7 @@ public class TitanImp implements GraphDAO {
             Vertex source = getVertexById(from.getIdVal());
             Vertex target = getVertexById(to.getIdVal());
 
-            if (source != null && target != null) {
-                graphDb.addEdge(null, source, target, KNOWS);
-            }
+            graphDb.addEdge(null, source, target, KNOWS);
 
             tx.commit();
         } catch (Exception ex) {
@@ -74,7 +72,6 @@ public class TitanImp implements GraphDAO {
             Vertex fromVertex = getVertexById(from.getIdVal());
             Vertex toVertex = getVertexById(to.getIdVal());
 
-            //if (fromVertex != null && toVertex != null) {
             Iterable<Edge> edges = fromVertex.getEdges(Direction.OUT, KNOWS);
             for (Edge edge : edges) {
 
@@ -84,7 +81,7 @@ public class TitanImp implements GraphDAO {
                     graphDb.removeEdge(edge);
                 }
             }
-            // }
+
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
@@ -117,11 +114,10 @@ public class TitanImp implements GraphDAO {
         TitanTransaction tx = graphDb.startTransaction();
         try {
             Vertex node = getVertexById(vertex.getIdVal());
-            if (node != null) {
-                node.setProperty("intVal", newVertex.getIntVal());
-                node.setProperty("doubleVal", newVertex.getDoubleVal());
-                node.setProperty("stringVal", newVertex.getStringVal());
-            }
+            node.setProperty("intVal", newVertex.getIntVal());
+            node.setProperty("doubleVal", newVertex.getDoubleVal());
+            node.setProperty("stringVal", newVertex.getStringVal());
+
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
@@ -135,14 +131,10 @@ public class TitanImp implements GraphDAO {
         TitanTransaction tx = graphDb.startTransaction();
         try {
             Vertex node = getVertexById(vertex.getIdVal());
-            if (node != null) {
-                for (Edge e : node.getEdges(com.tinkerpop.blueprints.Direction.OUT, KNOWS)) {
-                    graphDb.removeEdge(e);
-                }
 
-                graphDb.removeVertex(node);
-                vertexMapping.remove(vertex.getIdVal());
-            }
+            graphDb.removeVertex(node);
+            vertexMapping.remove(vertex.getIdVal());
+
             tx.commit();
         } catch (Exception ex) {
             tx.abort();

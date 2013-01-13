@@ -52,94 +52,94 @@ public class PostgresSQLImp implements GraphDAO {
 
     @Override
     public void createEdge(VertexModel from, VertexModel to) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
-            query.executeUpdate();
+        Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
+        query.executeUpdate();
 
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            connection.getTransaction().rollback();
-            System.out.println(e);
-        }
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            connection.getTransaction().rollback();
+//            System.out.println(e);
+//        }
     }
 
     @Override
     public void removeEdge(VertexModel from, VertexModel to) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
-            query.executeUpdate();
+        Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_EDGE_QUERY, from.getIdVal(), to.getIdVal()));
+        query.executeUpdate();
 
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-            connection.getTransaction().rollback();
-        }
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            connection.getTransaction().rollback();
+//        }
     }
 
     @Override
     public void createVertex(VertexModel vertexModel) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_VERTEX_QUERY, vertexModel.getIdVal(), vertexModel.getIntVal(), vertexModel.getDoubleVal(), vertexModel.getStringVal()));
-            query.executeUpdate();
+        Query query = connection.createNativeQuery(String.format(Locale.US, INSERT_VERTEX_QUERY, vertexModel.getIdVal(), vertexModel.getIntVal(), vertexModel.getDoubleVal(), vertexModel.getStringVal()));
+        query.executeUpdate();
 
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-            connection.getTransaction().rollback();
-        }
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            connection.getTransaction().rollback();
+//        }
     }
 
     @Override
     public void updateVertex(VertexModel vertex, VertexModel newVertex) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, UPDATE_VERTEX_QUERY, vertex.getIntVal(), vertex.getDoubleVal(), vertex.getStringVal()));
-            query.executeUpdate();
+        Query query = connection.createNativeQuery(String.format(Locale.US, UPDATE_VERTEX_QUERY, vertex.getIntVal(), vertex.getDoubleVal(), vertex.getStringVal()));
+        query.executeUpdate();
 
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-            connection.getTransaction().rollback();
-        }
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            connection.getTransaction().rollback();
+//        }
     }
 
     @Override
     public void removeVertex(VertexModel vertex) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_VERTEX_QUERY, vertex.getIdVal()));
-            query.executeUpdate();
+        Query query = connection.createNativeQuery(String.format(Locale.US, DELETE_VERTEX_QUERY, vertex.getIdVal()));
+        query.executeUpdate();
 
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-            connection.getTransaction().rollback();
-        }
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            connection.getTransaction().rollback();
+//        }
     }
 
     @Override
     public void readVertex(VertexModel vertex) {
-        try {
-            connection.getTransaction().begin();
+//        try {
+        connection.getTransaction().begin();
 
-            Query query = connection.createNativeQuery(String.format(Locale.US, READ_VERTEX_QUERY, vertex.getIdVal()));
+        Query query = connection.createNativeQuery(String.format(Locale.US, READ_VERTEX_QUERY, vertex.getIdVal()));
 
-            for (Object v : query.getResultList()) {
-            }
-
-            connection.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e);
-            connection.getTransaction().rollback();
+        for (Object v : query.getResultList()) {
         }
+
+        connection.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            connection.getTransaction().rollback();
+//        }
     }
 
     @Override

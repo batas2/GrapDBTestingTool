@@ -1,13 +1,15 @@
 package pl.bfrackowiak.TestsScenario;
 
 import java.util.List;
+import org.jgrapht.Graph;
 import pl.bfrackowiak.TestsScenario.Commands.ScenarioCommand;
+import pl.bfrackowiak.grapdbtests.VertexModel;
+import pl.bfrackowiak.grapdbtests.WeightedEdge;
 
 /**
- * @author Bartosz Frackowiak
- * http://bfrackowiak.pl/
+ * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
 public interface Scenario {
 
-    List<ScenarioCommand> getScenario(int length);
+    List<ScenarioCommand> getScenario(Graph<VertexModel, WeightedEdge> graph, int length);
 }
