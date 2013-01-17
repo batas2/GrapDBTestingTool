@@ -143,6 +143,11 @@ public class TitanImp implements GraphDAO {
         TitanTransaction tx = graphDb.startTransaction();
         try {
             Vertex node = getVertexById(vertex.getIdVal());
+            
+            for(Edge e : node.getEdges(Direction.BOTH, KNOWS)){
+                e.toString();
+            }
+            
             tx.commit();
         } catch (Exception ex) {
             tx.abort();
