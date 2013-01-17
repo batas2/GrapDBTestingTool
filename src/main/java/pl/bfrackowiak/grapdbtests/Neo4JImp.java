@@ -2,6 +2,7 @@ package pl.bfrackowiak.grapdbtests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import org.jgrapht.Graph;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -18,7 +19,12 @@ import org.neo4j.kernel.impl.util.FileUtils;
 public class Neo4JImp implements GraphDAO {
 
     private static final String DB_PATH = "target/neo4j-tests-db";
-    GraphDatabaseService graphDb;
+    private GraphDatabaseService graphDb;
+    private HashMap<Long, Node> vertexMapping;
+
+    private Node getVertexById(long id) {
+        return vertexMapping.get(id);
+    }
 
     @Override
     public void init() {
@@ -31,6 +37,7 @@ public class Neo4JImp implements GraphDAO {
 
     @Override
     public void create(Graph<VertexModel, WeightedEdge> graph) {
+        vertexMapping = new HashMap<Long, Node>(graph.vertexSet().size() * 5);
         Transaction tx = graphDb.beginTx();
         try {
             for (VertexModel vertex : graph.vertexSet()) {
@@ -52,8 +59,11 @@ public class Neo4JImp implements GraphDAO {
     public void createEdge(VertexModel from, VertexModel to) {
         Transaction tx = graphDb.beginTx();
         try {
-            Node source = graphDb.getNodeById(from.getIdVal());
-            Node target = graphDb.getNodeById(to.getIdVal());
+//            Node source = graphDb.getNodeById(from.getIdVal());
+//            Node target = graphDb.getNodeById(to.getIdVal());
+
+            Node source = getVertexById(from.getIdVal());
+            Node target = getVertexById(to.getIdVal());
 
             source.createRelationshipTo(target, RelTypes.KNOWS);
             tx.success();
@@ -68,8 +78,11 @@ public class Neo4JImp implements GraphDAO {
     public void removeEdge(VertexModel from, VertexModel to) {
         Transaction tx = graphDb.beginTx();
         try {
-            Node source = graphDb.getNodeById(from.getIdVal());
-            Node target = graphDb.getNodeById(to.getIdVal());
+//            Node source = graphDb.getNodeById(from.getIdVal());
+//            Node target = graphDb.getNodeById(to.getIdVal());
+
+            Node source = getVertexById(from.getIdVal());
+            Node target = getVertexById(to.getIdVal());
 
             Iterable<Relationship> relationships = source.getRelationships(Direction.OUTGOING);
             for (Relationship r : relationships) {
@@ -95,6 +108,7 @@ public class Neo4JImp implements GraphDAO {
             node.setProperty("doubleVal", vertexModel.getDoubleVal());
             node.setProperty("stringVal", vertexModel.getStringVal());
 
+            vertexMapping.put(vertexModel.getIdVal(), node);
             tx.success();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -107,7 +121,10 @@ public class Neo4JImp implements GraphDAO {
     public void updateVertex(VertexModel vertex, VertexModel newVertex) {
         Transaction tx = graphDb.beginTx();
         try {
-            Node node = graphDb.getNodeById(vertex.getIdVal());
+            //Node node = graphDb.getNodeById(vertex.getIdVal());
+
+            Node node = getVertexById(vertex.getIdVal());
+
             node.setProperty("intVal", newVertex.getIntVal());
             node.setProperty("doubleVal", newVertex.getDoubleVal());
             node.setProperty("stringVal", newVertex.getStringVal());
@@ -123,9 +140,15 @@ public class Neo4JImp implements GraphDAO {
     public void removeVertex(VertexModel vertex) {
         Transaction tx = graphDb.beginTx();
         try {
-            Node node = graphDb.getNodeById(vertex.getIdVal());
+            //Node node = graphDb.getNodeById(vertex.getIdVal());
+
+            Node node = getVertexById(vertex.getIdVal());
+            for (Relationship r : node.getRelationships()) {
+                r.delete();
+            }
 
             node.delete();
+            vertexMapping.remove(vertex.getIdVal());
 
             tx.success();
         } catch (Exception ex) {
@@ -139,9 +162,15 @@ public class Neo4JImp implements GraphDAO {
     public void readVertex(VertexModel vertex) {
         Transaction tx = graphDb.beginTx();
         try {
-            graphDb.getNodeById(vertex.getIdVal());
+            //graphDb.getNodeById(vertex.getIdVal());
+            Node node = getVertexById(vertex.getIdVal());
+            for (Relationship r : node.getRelationships()) {
+                r.toString();
+            }
             tx.success();
+
         } catch (Exception ex) {
+            tx.failure();
             System.out.println(ex.getMessage());
         } finally {
             tx.finish();

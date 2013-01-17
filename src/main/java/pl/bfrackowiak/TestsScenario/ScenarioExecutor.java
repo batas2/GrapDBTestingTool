@@ -10,17 +10,18 @@ import pl.bfrackowiak.grapdbtests.GraphDAO;
 public class ScenarioExecutor {
 
     public long Execute(List<ScenarioCommand> scenario, GraphDAO graphDAO) {
-        graphDAO.init();
 
         long start = System.currentTimeMillis();
 
+        graphDAO.init();
+        
         for (ScenarioCommand command : scenario) {
             command.Execute(graphDAO);
         }
 
-        long end = System.currentTimeMillis();
-
         graphDAO.dispose();
+
+        long end = System.currentTimeMillis();
 
         return end - start;
     }

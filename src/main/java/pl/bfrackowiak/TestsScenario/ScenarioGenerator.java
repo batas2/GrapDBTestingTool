@@ -9,7 +9,11 @@ import pl.bfrackowiak.grapdbtests.WeightedEdge;
 /**
  * @author Bartosz Frackowiak http://bfrackowiak.pl/
  */
-public interface Scenario {
+public interface ScenarioGenerator {
 
     List<ScenarioCommand> getScenario(Graph<VertexModel, WeightedEdge> graph, int length);
+
+    VertexModel getVertex();
+
+    WeightedEdge getEdge();
 }

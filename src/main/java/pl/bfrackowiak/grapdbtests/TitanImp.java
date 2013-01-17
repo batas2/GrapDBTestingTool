@@ -16,6 +16,7 @@ public class TitanImp implements GraphDAO {
 
     private static final String DB_PATH = "target/titan-tests-db";
     private static final String KNOWS = "knows";
+    
     private TitanGraph graphDb;
     private HashMap<Long, Vertex> vertexMapping;
 
@@ -72,7 +73,7 @@ public class TitanImp implements GraphDAO {
 
                 Vertex inVertex = edge.getVertex(Direction.IN);
 
-                if (inVertex.getId() == toVertex.getId()) {
+                if (inVertex.getId().equals(toVertex.getId())) {
                     graphDb.removeEdge(edge);
                 }
             }
@@ -81,7 +82,6 @@ public class TitanImp implements GraphDAO {
         } catch (Exception ex) {
             tx.abort();
             System.out.println(ex.getMessage());
-
         }
     }
 

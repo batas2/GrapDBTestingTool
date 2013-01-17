@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package pl.bfrackowiak.TestsScenario;
 
 import java.util.LinkedList;
@@ -10,14 +14,15 @@ import pl.bfrackowiak.grapdbtests.VertexModel;
 import pl.bfrackowiak.grapdbtests.WeightedEdge;
 
 /**
- * @author Bartosz Frackowiak http://bfrackowiak.pl/
+ *
+ * @author Bartosz
  */
-public class RandomScenarioGenerator implements ScenarioGenerator {
+public class ReadScenarioGenerator implements ScenarioGenerator {
 
     private Random rand;
     private Graph<VertexModel, WeightedEdge> graph;
 
-    public RandomScenarioGenerator() {
+    public ReadScenarioGenerator() {
         rand = new Random();
     }
 
@@ -28,31 +33,11 @@ public class RandomScenarioGenerator implements ScenarioGenerator {
         List<ScenarioCommand> scenario = new LinkedList<ScenarioCommand>();
 
         scenario.add(new CreateGraphCommand(graph));
-
         for (int i = 0; i < length; i++) {
-            int index = rand.nextInt(6);
-            switch (index) {
-                case 0:
-                    scenario.add(crud.getCreateEdgeCommand());
-                    break;
-                case 1:
-                    scenario.add(crud.getDeleteEdgeCommand());
-                    break;
-                case 2:
-                    scenario.addAll(crud.getDeleteVertexCommand());
-                    break;
-                case 3:
-                    scenario.add(crud.getUpdateVertexCommand());
-                    break;
-                case 4:
-                    scenario.add(crud.getReadVertexCommand());
-                    break;
-                case 5:
-                    scenario.add(crud.getCreateVertexCommand());
-                    break;
-            }
-        }
+            scenario.add(crud.getReadVertexCommand());
+            scenario.add(crud.getReadVertexCommand());
 
+        }
         return scenario;
     }
 
